@@ -47,3 +47,22 @@ ELSE
 <p> The behavioural planner is implemented based on the above psuedo code. After the car is set to the desired state from rest, it checks whether any car is ahead of it or not. If so then it prepares for lane change based on the FSM above and moves to corresponding lane. If both the left and right lanes are occupied then the our car is deacclerated until we are in safe distace from the car ahead (30m).</p>
 
 <p> If there is no car ahead of us we check whether our ego car is in center lane and our car drives in reference speed of 49.5 mph. If the speed is less we accelerate and if the car is not in center lane but in left lane we check our right lane and move to right if it is free and vice versa.</p>
+
+
+<h2> Frenet Coordinates </h2>
+
+<p> The planner uses frenet coordinate system to estimate the vehicles around it and to compute the trajectory. The main advantage of using frenet is that it gives linear function even for curvy roads. The cartesian coordinate system for the road of below kind gives a quadratic equation.</p>
+
+<img src="" alt=""/>
+
+<p> But the frenet coordinates gives a direct straight line  as below.</p>
+
+<img src="" alt=""/>
+<img src="" alt=""/>
+<p>The d parameter in frenet coordinate system corresponds to the lanes width or  lateral displacement. The center yellow lane is marked as 0 in the project, the left lanes are numbered positive and right are negative. The lane width used in the project os of 4m and our car is in the center. The s parameter is denotes the longitudinal displacement which represents distance along the road.</p>
+
+<h2>Trajectory Generation </h2>
+
+<p>The trajectory generation module uses spline library of c++ to provide polynomial fitting for the points. The main advantage of spline library is that it generates smooth trajectory even in curved roads. Now to provide smooth traversal from one state to another, we use the previous state values and fill the array for new states only for those points which are travelled in the previous state. We keep an array of size 50 for this purpose. First if the previous state array is empty we fill the present car coordinates and we find out the previous coordinate by subtracting the cosing and sine of yaw angle. If the array has values we take only the last 2 elements for generating the next state points. </p>
+
+<p> We then interpolate the previous points with the last measured car's s value incremented by 30,60 and 90 to generate the next trajectory using spline function. Before we pass to spline we just transform all the 5 new points to last measured car's point space to make the yaw angles 0.</p>
