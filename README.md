@@ -7,9 +7,11 @@
 <h2> Overview </h2>
 <p>  The project focusses on path planning for the self driving car in Highways. The project uses sensor fusion to get the data about its surrounding vehicles. A behivour planner is used to estimate the best state at any given time based on the sensor fusion data, car's position and map's data. It uses a finite state machine to find out the next state based on the particular behaviour. The trajectory generator generates various trajectories at a given time based on the state output of the behaviour planner and uses a cost function to select the best trajectory at a given time. The output of the trajectory planner is given to motion control system to implement the trajectory. Here we assume that the car implements the behavior without any error as given by the output of the trajectory planner (like the car moves 10m forward if planner sent that without any error), so we don't use a controller here.</p>
 
+<img src="Capture2.JPG" alt="fullpath"/>
+
 <h2> Finite State Machine </h2>
 
-<img src="" alt="FSM"/>
+<img src="Capture3.JPG" alt="FSM"/>
 
 <p> The behavioural planner uses Finite state machine to find out the next state based on the current state and measurmenets from sensors.The ready state is the initial state where the car starts from rest and reaches the desired speed limit. The speed limit for the project is 50 mph. To avoid jerk we set the limit the change in acceleration to be less than 10m/s. (here we use 5m/s). So when car is in ready state it acclerates to the speed if (49.5mph in this case) and moves to lane keep state. </p>
 
@@ -53,12 +55,12 @@ ELSE
 
 <p> The planner uses frenet coordinate system to estimate the vehicles around it and to compute the trajectory. The main advantage of using frenet is that it gives linear function even for curvy roads. The cartesian coordinate system for the road of below kind gives a quadratic equation.</p>
 
-<img src="" alt=""/>
+<img src="Capture4.JPG" alt="xy"/>
 
 <p> But the frenet coordinates gives a direct straight line  as below.</p>
 
-<img src="" alt=""/>
-<img src="" alt=""/>
+<img src="Capture5.JPG" alt="frenet"/>
+<img src="Capture6.JPG" alt="frenet1"/>
 <p>The d parameter in frenet coordinate system corresponds to the lanes width or  lateral displacement. The center yellow lane is marked as 0 in the project, the left lanes are numbered positive and right are negative. The lane width used in the project os of 4m and our car is in the center. The s parameter is denotes the longitudinal displacement which represents distance along the road.</p>
 
 <h2>Trajectory Generation </h2>
