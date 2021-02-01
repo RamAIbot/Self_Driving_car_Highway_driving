@@ -63,6 +63,62 @@ ELSE
 
 <h2>Trajectory Generation </h2>
 
+<h3> Curve fitting with spline </h3>
+
 <p>The trajectory generation module uses spline library of c++ to provide polynomial fitting for the points. The main advantage of spline library is that it generates smooth trajectory even in curved roads. Now to provide smooth traversal from one state to another, we use the previous state values and fill the array for new states only for those points which are travelled in the previous state. We keep an array of size 50 for this purpose. First if the previous state array is empty we fill the present car coordinates and we find out the previous coordinate by subtracting the cosing and sine of yaw angle. If the array has values we take only the last 2 elements for generating the next state points. </p>
 
 <p> We then interpolate the previous points with the last measured car's s value incremented by 30,60 and 90 to generate the next trajectory using spline function. Before we pass to spline we just transform all the 5 new points to last measured car's point space to make the yaw angles 0.</p>
+
+<h3> Generation of trajectory </h3>
+
+<p>Now we generate the trajectory for a distance ahead of 30m. We divide the space with N points based on based on the hypotenuse of the x,y points and finally transform the points in reverse as before and store in the array of previously untraversed points to ensure smoother transition.</p>
+
+<h2> Simulator details </h2>
+
+Main car's localization Data (No Noise)
+["x"] The car's x position in map coordinates
+
+["y"] The car's y position in map coordinates
+
+["s"] The car's s position in frenet coordinates
+
+["d"] The car's d position in frenet coordinates
+
+["yaw"] The car's yaw angle in the map
+
+["speed"] The car's speed in MPH
+
+Previous path data given to the Planner
+//Note: Return the previous list but with processed points removed, can be a nice tool to show how far along the path has processed since last time.
+
+["previous_path_x"] The previous list of x points previously given to the simulator
+
+["previous_path_y"] The previous list of y points previously given to the simulator
+
+Previous path's end s and d values
+["end_path_s"] The previous list's last point's frenet s value
+
+["end_path_d"] The previous list's last point's frenet d value
+
+Sensor Fusion Data, a list of all other car's attributes on the same side of the road. (No Noise)
+["sensor_fusion"] A 2d vector of cars and then that car's [car's unique ID, car's x position in map coordinates, car's y position in map coordinates, car's x velocity in m/s, car's y velocity in m/s, car's s position in frenet coordinates, car's d position in frenet coordinates.
+
+Details
+The car uses a perfect controller and will visit every (x,y) point it recieves in the list every .02 seconds. The units for the (x,y) points are in meters and the spacing of the points determines the speed of the car. The vector going from a point to the next point in the list dictates the angle of the car. Acceleration both in the tangential and normal directions is measured along with the jerk, the rate of change of total Acceleration. 
+
+There will be some latency between the simulator running and the path planner returning a path, with optimized code usually its not very long maybe just 1-3 time steps. During this delay the simulator will continue using points that it was last given, because of this its a good idea to store the last points you have used so you can have a smooth transition. previous_path_x, and previous_path_y can be helpful for this transition since they show the last points given to the simulator controller with the processed points already removed.
+
+<h2> Execution </h2>
+
+```
+Simulation link: github.com/udacity/self-driving-car-sim/releases/tag/T3_v1.2
+Make a build directory: mkdir build && cd build
+Compile: cmake .. && make
+Run it: ./path_planning.
+
+```
+
+<h2>Output</h2>
+<img src="Capture1.JPG" alt="out"/>
+
+<p> The car has travelled 4.23 miles  (one lap around the entire simulation) without any incident.</p>
